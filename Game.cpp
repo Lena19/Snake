@@ -54,12 +54,12 @@ void play(Snake &snake, Field* field) {
     auto start_time = chrono::high_resolution_clock::now();
     while (1) {
         field->draw();     
-        unique_lock<mutex> lck(mtx);
+        //unique_lock<mutex> lck(mtx);
         if (!snake.move()) {
             set_field(field, snake);
             start_time = chrono::high_resolution_clock::now();
         }
-        lck.unlock();
+        //lck.unlock();
         auto cur_time = chrono::high_resolution_clock::now();
         if (chrono::duration_cast<chrono::seconds>(cur_time - start_time) >= chrono::seconds(10)) {
             start_time = cur_time;
