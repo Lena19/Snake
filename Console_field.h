@@ -5,7 +5,7 @@
 class Console_field : public Field {
 public:
 	Console_field();
-	Console_field(int w, int h);
+	Console_field(int h, int w);
 	void draw();
 	int get_width();
 	int get_height();

@@ -8,7 +8,8 @@ enum class celltype
 	SNAKE_HEAD,
 	TARGET,
 	VEDGE,
-	HEDGE
+	HEDGE,
+	STATUS
 };
 
 class Cell {

@@ -4,7 +4,7 @@ Console_field::Console_field() {
 	width = 0;
 	height = 0;
 }
-Console_field::Console_field(int w, int h) {
+Console_field::Console_field(int h, int w) {
 	width = w;
 	height = h;
 	cells.resize(height);
@@ -76,5 +76,6 @@ void Console_field::draw() {
 		}
 		field_string += "\n";
 	}
+
 	cout << field_string << endl;
 }

@@ -38,6 +38,9 @@ void Console_cell::draw() {
 		case celltype::VEDGE:
 			printf("  |");
 			break;
+		case celltype::STATUS:
+			printf("   ");
+			break;
 	}
 }
 std::string Console_cell::get_drawing() {
@@ -54,5 +57,7 @@ std::string Console_cell::get_drawing() {
 		return "___";
 	case celltype::VEDGE:
 		return "  |";
+	case celltype::STATUS:
+		return "   ";
 	}
 }
