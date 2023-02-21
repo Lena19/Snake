@@ -51,7 +51,6 @@ void play(Snake &snake, Field* field, Status_field* csfield) {
     while (1) {
         field->draw(); 
         csfield->draw();
-        //unique_lock<mutex> lck(mtx);
         int status = snake.move();
         if (status == -1) {
             set_field(field, snake, csfield);
@@ -59,23 +58,17 @@ void play(Snake &snake, Field* field, Status_field* csfield) {
             score = 0, speed = 1; 
             status = 0;
         }
+        int was = score;
         score += status;
         csfield->update_info("Score", score);
-        if (status != 0 and score and score % 5 == 0) {
-            speed++;
-            csfield->update_info("Speed", speed);
-            sleep_timer = max(sleep_timer - 20, 20);
+        for (; was <= score; was++) {
+            if (status != 0 and was and was % 5 == 0) {
+                speed++;
+                csfield->update_info("Speed", speed);
+                sleep_timer = max(sleep_timer - 20, 20);
+                break;
+            }
         }
-        //lck.unlock();
-        /*
-        auto cur_time = chrono::high_resolution_clock::now();
-        if (chrono::duration_cast<chrono::seconds>(cur_time - start_time) >= chrono::seconds(10)) {
-            start_time = cur_time;
-            sleep_timer = max(sleep_timer - 20, 20);
-            speed++;
-            csfield->update_info("Speed", speed);
-        }
-        */
         Sleep(sleep_timer);
         system("cls");
     }
