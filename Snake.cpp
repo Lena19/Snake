@@ -16,7 +16,7 @@ void Snake::rotate(direction dir) {
 	body[0].second = dir;
 }
 
-bool Snake::move() {
+int Snake::move() {
 	auto was_head = coords[0];
 	field->set_cell(was_head.first, was_head.second, celltype::SNAKE_BODY);
 	auto tail = coords.back();
@@ -25,36 +25,37 @@ bool Snake::move() {
 	switch (dir) {
 	case direction::LEFT:
 		if (head_posx == 1) {
-			return false;
+			return -1;
 		}
 		head_posx--;
 		break;
 	case direction::RIGHT:
 		if (head_posx == field->get_width() - 1) {
-			return false;
+			return -1;
 		}
 		head_posx++;
 		break;
 	case direction::UP:
 		if (head_posy == 1) {
-			return false;
+			return -1;
 		}
 		head_posy--;
 		break;
 	case direction::DOWN:
 		if (head_posy == field->get_height() - 1) {
-			return false;
+			return -1;
 		}
 		head_posy++;
 		break;
 	}
 	coords[0] = make_pair(head_posx, head_posy);
 	if (field->get_celltype(head_posx, head_posy) == celltype::SNAKE_BODY) {
-		return false;
+		return -1;
 	}
+	int cnt = 0;
 	if (field->get_celltype(head_posx, head_posy) == celltype::TARGET) {
-		grow();
-		while (!field->spawn_target()) grow();
+		grow(); cnt++;
+		while (!field->spawn_target()) grow(), cnt++;
 	}
 	field->set_cell(head_posx, head_posy, celltype::SNAKE_HEAD);
 	for (int i = (int)body.size() - 1; i > 0; i--) {
@@ -72,7 +73,7 @@ bool Snake::move() {
 		}
 		body[i].second = body[i - 1].second;
 	}
-	return true;
+	return cnt;
 }
 
 void Snake::grow() {

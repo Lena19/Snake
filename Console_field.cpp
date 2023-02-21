@@ -77,5 +77,5 @@ void Console_field::draw() {
 		field_string += "\n";
 	}
 
-	cout << field_string << endl;
+	cout << field_string;
 }

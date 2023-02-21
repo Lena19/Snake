@@ -21,6 +21,7 @@ public:
 	Snake(){}
 	Snake(int x, int y, Field* f, Cell* c);
 	void rotate(direction dir);
-	bool move();
+	int move();								//-1 if move is not possible, 
+											//number of obtained targets otherwise 			
 	void grow();
 };

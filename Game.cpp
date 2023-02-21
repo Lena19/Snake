@@ -29,10 +29,12 @@ void set_window() {
     MoveWindow(console, r.left, r.top, WIDTH * 25, HEIGHT * 30, true);
 }
 
-void set_field(Field*& f, Snake & s, Field*& csf) {
+void set_field(Field*& f, Snake & s, Status_field*& csf) {
 
     f = new Console_field(HEIGHT + 1, WIDTH + 1);
     csf = new Console_status_field(5, WIDTH + 1);
+    csf->update_info("Score", 0);
+    csf->update_info("Speed", 1);
   
     int head_posx = rand() % (WIDTH / 2) + 1;
     int head_posy = rand() % (HEIGHT / 2) + 1;
@@ -43,22 +45,37 @@ void set_field(Field*& f, Snake & s, Field*& csf) {
     sleep_timer = initial_sleep_timer;
 }
 
-void play(Snake &snake, Field* field, Field* csfield) {
+void play(Snake &snake, Field* field, Status_field* csfield) {
     auto start_time = chrono::high_resolution_clock::now();
+    int score = 0, speed = 1;
     while (1) {
         field->draw(); 
         csfield->draw();
         //unique_lock<mutex> lck(mtx);
-        if (!snake.move()) {
+        int status = snake.move();
+        if (status == -1) {
             set_field(field, snake, csfield);
             start_time = chrono::high_resolution_clock::now();
+            score = 0, speed = 1; 
+            status = 0;
+        }
+        score += status;
+        csfield->update_info("Score", score);
+        if (status != 0 and score and score % 5 == 0) {
+            speed++;
+            csfield->update_info("Speed", speed);
+            sleep_timer = max(sleep_timer - 20, 20);
         }
         //lck.unlock();
+        /*
         auto cur_time = chrono::high_resolution_clock::now();
         if (chrono::duration_cast<chrono::seconds>(cur_time - start_time) >= chrono::seconds(10)) {
             start_time = cur_time;
             sleep_timer = max(sleep_timer - 20, 20);
+            speed++;
+            csfield->update_info("Speed", speed);
         }
+        */
         Sleep(sleep_timer);
         system("cls");
     }
@@ -128,7 +145,7 @@ int main(int argc, char* argv[])
     set_size(argc, argv);
     set_window();
     Field* field;
-    Field* csfield;
+    Status_field* csfield;
     Snake snake;
     set_field(field, snake, csfield);
 
